@@ -7,16 +7,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/musclegroup")
+@RequestMapping("/musclegroups")
 public class MusclegroupResource {
     private final MusclegroupService mgService;
 
     @Autowired
-    public MusclegroupResource(MusclegroupService mgService){
-        this.mgService = mgService;
-    }
+    public MusclegroupResource(MusclegroupService mgService){this.mgService = mgService;}
 
     @GetMapping("/{id}")
     public ResponseEntity<Musclegroup> findMusclegroupById(@PathVariable Long id){
@@ -24,7 +24,13 @@ public class MusclegroupResource {
         return new ResponseEntity<>(musclegroup, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
+    @GetMapping
+    public ResponseEntity<List<Musclegroup>> getAllExercises(){
+        List<Musclegroup> musclegroups = mgService.getAllMusclegroups();
+        return new ResponseEntity<>(musclegroups, HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping
     public ResponseEntity<Musclegroup> addMusclegroup(@RequestBody Musclegroup musclegroup){
         Musclegroup newMusclegroup = mgService.addMuscleGroup(musclegroup);
         return new ResponseEntity<>(newMusclegroup, HttpStatus.CREATED);

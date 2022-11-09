@@ -1,13 +1,19 @@
 package com.ly.Resolute.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name="exercise")
 public class Exercise {
     @Id
@@ -21,41 +27,23 @@ public class Exercise {
     @Column
     private String details;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "exercise_musclegroup",
             joinColumns = @JoinColumn(name = "exercise_id"),
             inverseJoinColumns = @JoinColumn(name = "musclegroup_id"))
     private Set<Musclegroup> musclegroups = new HashSet<>();
 
-    public Exercise() {}
+//    @JsonIgnore
+//    @ManyToMany(mappedBy = "exercises", fetch = FetchType.LAZY)
+//    private Set<Routine> routines = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
+    private Set<RoutineExercise> routineExercises = new HashSet<>();
 
     public Exercise(String name, @Nullable String details){
         this.name = name;
         this.details = details;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public Set<Musclegroup> getMusclegroups() {
-        return musclegroups;
     }
 
     public void addMusclegroupToExercise(Musclegroup musclegroup){

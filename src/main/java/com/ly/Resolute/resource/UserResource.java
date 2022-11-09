@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserResource {
     private final UserService userService;
 
@@ -18,31 +18,31 @@ public class UserResource {
         this.userService = userService;
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> users = userService.findAllUsers();
         return new ResponseEntity<>(users, HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/find/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id){
         User user = userService.findUserById(id);
         return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<User> addUser(@RequestBody User user){
         User newUser = userService.addUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable Long id){
         User updateEmployee = userService.updateUser(user, id);
         return new ResponseEntity<>(updateEmployee, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUserById (@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);

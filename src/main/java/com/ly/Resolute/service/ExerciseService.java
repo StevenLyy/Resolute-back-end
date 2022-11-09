@@ -14,7 +14,6 @@ import java.util.List;
 @Service
 public class ExerciseService {
     private final ExerciseRepo exerciseRepo;
-
     private final MusclegroupRepo musclegroupRepo;
 
     @Autowired
@@ -23,7 +22,7 @@ public class ExerciseService {
         this.musclegroupRepo = musclegroupRepo;
     }
 
-    public Exercise findExerciseById(Long id){
+    public Exercise findById(Long id){
         return exerciseRepo.findById(id)
                 .orElseThrow( () -> new ExerciseNotFoundException("Exercise by id" + id + "not found"));
     }
