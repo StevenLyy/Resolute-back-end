@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/users")
+@RequestMapping("api/v1/users")
 public class UserResource {
     private final UserService userService;
 

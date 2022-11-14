@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/musclegroups")
+@RequestMapping("api/v1/musclegroups")
 public class MusclegroupResource {
     private final MusclegroupService mgService;
 
