@@ -11,8 +11,7 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
       
     - name: Publish to Docker Hub
       uses: docker/build-push-action@v1
@@ -21,3 +20,6 @@ jobs:
         password: ${{secrets.DOCKER_PASSWORD}}
         repository: resoluterun
         tags: latest, ${{github.run_number}}
+        
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
