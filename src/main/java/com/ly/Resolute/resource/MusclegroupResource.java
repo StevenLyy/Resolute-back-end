@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5000"})
 @RequestMapping("api/v1/musclegroups")
 public class MusclegroupResource {
     private final MusclegroupService mgService;

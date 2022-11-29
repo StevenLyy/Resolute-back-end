@@ -1,7 +1,10 @@
 package com.ly.Resolute.service;
 
+import com.ly.Resolute.exception.RoutineNotFoundException;
 import com.ly.Resolute.exception.UserNotFoundException;
+import com.ly.Resolute.model.Routine;
 import com.ly.Resolute.model.User;
+import com.ly.Resolute.repository.RoutineRepo;
 import com.ly.Resolute.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +14,12 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepo userRepo;
+    private final RoutineRepo routineRepo;
 
     @Autowired
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo, RoutineRepo routineRepo) {
         this.userRepo = userRepo;
+        this.routineRepo = routineRepo;
     }
 
     public User findUserById(long id){
@@ -45,5 +50,15 @@ public class UserService {
         long updatedStreak = user.increaseStreak();
         userRepo.save(user);
         return updatedStreak;
+    }
+
+    public Routine addRoutineToUser(Long userId, Long routineId){
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User by id" + userId + " not found"));
+        Routine routine = routineRepo.findById(routineId)
+                .orElseThrow(() -> new RoutineNotFoundException("Routine by id" + routineId + " not found"));
+        user.addRoutineToUser(routine);
+        userRepo.save(user);
+        return routine;
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5000"})
 @RequestMapping("api/v1/exercises")
 public class ExerciseResource {
     private final ExerciseService exerciseService;
@@ -49,9 +49,9 @@ public class ExerciseResource {
     }
 
     @PostMapping("/{exerciseId}/musclegroups/{musclegroupId}")
-    public ResponseEntity<Exercise> addMusclegroupToExercise(@PathVariable long exerciseId, @PathVariable long musclegroupId){
+    public ResponseEntity<String> addMusclegroupToExercise(@PathVariable long exerciseId, @PathVariable long musclegroupId){
         Exercise exercise = exerciseService.addMusclegroupToExercise(exerciseId, musclegroupId);
-        return new ResponseEntity<>(exercise, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Musclegroup has been added to '" + exercise.getName() + "'", HttpStatus.ACCEPTED);
     }
 }
 

@@ -1,5 +1,6 @@
 package com.ly.Resolute.resource;
 
+import com.ly.Resolute.model.Routine;
 import com.ly.Resolute.model.User;
 import com.ly.Resolute.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5000"})
 @RequestMapping("api/v1/users")
 public class UserResource {
     private final UserService userService;
@@ -52,5 +53,11 @@ public class UserResource {
     public ResponseEntity<String> increaseStreakOfUser(@PathVariable("id") long id){
         long updatedStreak = userService.increaseStreak(id);
         return new ResponseEntity<>("The current streak for this user is now: " + updatedStreak,HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("{userId}/routines/{routineId}")
+    public ResponseEntity<String> addRoutineToUser(@PathVariable("userId") long userId, @PathVariable("routineId") long routineId){
+        Routine routine = userService.addRoutineToUser(userId, routineId);
+        return new ResponseEntity<>("Routine '" + routine.getName() + "' added to user", HttpStatus.ACCEPTED);
     }
 }

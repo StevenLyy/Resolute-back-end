@@ -1,5 +1,6 @@
 package com.ly.Resolute.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,10 @@ public class Routine {
     @Column
     private long version;
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "routines", fetch = FetchType.LAZY)
+    private Set<User> users = new HashSet<>();
+
     public Routine(String name, long version) {
         this.name = name;
         this.version = version;
@@ -36,11 +41,4 @@ public class Routine {
     public void addRoutineExercises(RoutineExercise routineExercise){
         routineExercises.add(routineExercise);
     }
-
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(
-//            name = "routine_exercise",
-//            joinColumns = @JoinColumn(name = "routine_id"),
-//            inverseJoinColumns = {@JoinColumn(name = "exercise_id"), @Column(name="sets"), @JoinColumn(name = "reps")})
-//    private Set<Exercise> exercises = new HashSet<>();
 }
