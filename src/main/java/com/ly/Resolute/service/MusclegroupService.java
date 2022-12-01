@@ -24,7 +24,7 @@ public class MusclegroupService {
     }
 
     public List<Musclegroup> getAllMusclegroups(){
-        return mgRepo.findAllByOrderByIdAsc();
+        return mgRepo.findAll();
     }
     public Musclegroup findMusclegroupById(Long id) {
         return mgRepo.findById(id)
