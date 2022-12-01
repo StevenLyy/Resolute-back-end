@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SortNatural;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -28,14 +31,11 @@ public class Exercise {
     private String details;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @OrderBy("name ASC")
     @JoinTable(name = "exercise_musclegroup",
             joinColumns = @JoinColumn(name = "exercise_id"),
             inverseJoinColumns = @JoinColumn(name = "musclegroup_id"))
     private Set<Musclegroup> musclegroups = new HashSet<>();
-
-//    @JsonIgnore
-//    @ManyToMany(mappedBy = "exercises", fetch = FetchType.LAZY)
-//    private Set<Routine> routines = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)

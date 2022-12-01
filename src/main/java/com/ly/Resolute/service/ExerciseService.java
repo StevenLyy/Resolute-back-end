@@ -7,6 +7,7 @@ import com.ly.Resolute.model.Musclegroup;
 import com.ly.Resolute.repository.ExerciseRepo;
 import com.ly.Resolute.repository.MusclegroupRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +29,8 @@ public class ExerciseService {
     }
 
     public List<Exercise> findAllExercises(){
-        return exerciseRepo.findAll();
+        List<Exercise> exercises = exerciseRepo.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        return exercises;
     }
 
     public Exercise addExercise(Exercise exercise){
