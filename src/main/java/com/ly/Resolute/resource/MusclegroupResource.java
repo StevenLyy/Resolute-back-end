@@ -11,14 +11,14 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5000"})
-@RequestMapping("api/v1/musclegroups")
+@RequestMapping("api/v1/musclegroups/")
 public class MusclegroupResource {
     private final MusclegroupService mgService;
 
     @Autowired
     public MusclegroupResource(MusclegroupService mgService){this.mgService = mgService;}
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Musclegroup> findMusclegroupById(@PathVariable Long id){
         Musclegroup musclegroup = mgService.findMusclegroupById(id);
         return new ResponseEntity<>(musclegroup, HttpStatus.OK);

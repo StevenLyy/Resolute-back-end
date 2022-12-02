@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5000"})
-@RequestMapping("api/v1/exercises")
+@RequestMapping("api/v1/exercises/")
 public class ExerciseResource {
     private final ExerciseService exerciseService;
 
@@ -18,7 +18,7 @@ public class ExerciseResource {
         this.exerciseService = exerciseService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Exercise> getExerciseById(@PathVariable("id") Long id){
         Exercise exercise = exerciseService.findById(id);
         return new ResponseEntity<>(exercise, HttpStatus.ACCEPTED);
@@ -36,19 +36,19 @@ public class ExerciseResource {
         return new ResponseEntity<>(newExercise, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Exercise> updateExercise(@RequestBody Exercise exercise, @PathVariable Long id){
         Exercise updatedExercise = exerciseService.updateExercise(exercise, id);
         return new ResponseEntity<>(updatedExercise, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<?> deleteExerciseById (@PathVariable("id") Long id) {
         exerciseService.deleteExercise(id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/{exerciseId}/musclegroups/{musclegroupId}")
+    @PostMapping("{exerciseId}/musclegroups/{musclegroupId}")
     public ResponseEntity<String> addMusclegroupToExercise(@PathVariable long exerciseId, @PathVariable long musclegroupId){
         Exercise exercise = exerciseService.addMusclegroupToExercise(exerciseId, musclegroupId);
         return new ResponseEntity<>("Musclegroup has been added to '" + exercise.getName() + "'", HttpStatus.ACCEPTED);

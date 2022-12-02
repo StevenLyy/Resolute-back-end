@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5000"})
-@RequestMapping("api/v1/users")
+@RequestMapping("api/v1/users/")
 public class UserResource {
     private final UserService userService;
 
@@ -19,13 +19,12 @@ public class UserResource {
         this.userService = userService;
     }
 
-    @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> users = userService.findAllUsers();
         return new ResponseEntity<>(users, HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id){
         User user = userService.findUserById(id);
         return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
@@ -37,19 +36,19 @@ public class UserResource {
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable Long id){
         User updateEmployee = userService.updateUser(user, id);
         return new ResponseEntity<>(updateEmployee, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<?> deleteUserById (@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/increase/{id}")
+    @PutMapping("increase/{id}")
     public ResponseEntity<String> increaseStreakOfUser(@PathVariable("id") long id){
         long updatedStreak = userService.increaseStreak(id);
         return new ResponseEntity<>("The current streak for this user is now: " + updatedStreak,HttpStatus.ACCEPTED);
