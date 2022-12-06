@@ -36,6 +36,7 @@ public class Routine {
     }
 
     @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
     private Set<RoutineExercise> routineExercises = new HashSet<>();
 
     public void addRoutineExercises(RoutineExercise routineExercise){
