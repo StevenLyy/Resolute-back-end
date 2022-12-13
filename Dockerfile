@@ -8,8 +8,6 @@ COPY pom.xml /app
 
 RUN mvn -f /app/pom.xml clean package -DskipTests
 
-RUN chmod +x mvnw
-
 FROM openjdk:18-jdk-slim
 
 
