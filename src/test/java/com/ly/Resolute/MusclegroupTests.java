@@ -10,8 +10,7 @@ import org.springframework.test.context.TestPropertySource;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.util.AssertionErrors.assertEquals;
-import static org.springframework.test.util.AssertionErrors.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @TestPropertySource(locations="classpath:test.properties")
@@ -27,18 +26,19 @@ public class MusclegroupTests {
                 .findById(genericMusclegroup.getId());
 
         assertNotNull(foundMusclegroup);
-        assertEquals("Test", "Chest", foundMusclegroup.get().getName());
+        assertEquals("Chest", foundMusclegroup.get().getName());
     }
 
     @Test
     public void createAndUpdateMusclegroup(){
         Musclegroup genericMusclegroup = musclegroupRepo
                 .save(new Musclegroup("Chest"));
-        genericMusclegroup.setName("Back");
-        musclegroupRepo.save(genericMusclegroup);
         Optional<Musclegroup> foundMusclegroup = musclegroupRepo
                 .findById(genericMusclegroup.getId());
+        foundMusclegroup.get().setName("Back");
+        musclegroupRepo.save(foundMusclegroup.get());
+
         assertNotNull(foundMusclegroup);
-        assertEquals("Test","Back", foundMusclegroup.get().getName());
+        assertEquals("Back", foundMusclegroup.get().getName());
     }
 }
