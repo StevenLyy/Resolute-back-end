@@ -1,6 +1,7 @@
 package com.ly.Resolute.resource;
 
 import com.ly.Resolute.model.Routine;
+import com.ly.Resolute.resource.dto.SetsRepsDTO;
 import com.ly.Resolute.service.RoutineService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

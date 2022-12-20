@@ -19,6 +19,7 @@ public class UserResource {
         this.userService = userService;
     }
 
+    @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> users = userService.findAllUsers();
         return new ResponseEntity<>(users, HttpStatus.ACCEPTED);

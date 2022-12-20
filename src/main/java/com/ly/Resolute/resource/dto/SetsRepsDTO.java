@@ -1,4 +1,4 @@
-package com.ly.Resolute.resource;
+package com.ly.Resolute.resource.dto;
 
 import lombok.Getter;
 import lombok.Setter;
