@@ -4,22 +4,27 @@ import com.ly.Resolute.exception.RoutineNotFoundException;
 import com.ly.Resolute.exception.UserNotFoundException;
 import com.ly.Resolute.model.Routine;
 import com.ly.Resolute.model.User;
+import com.ly.Resolute.repository.AuthorityRepo;
 import com.ly.Resolute.repository.RoutineRepo;
 import com.ly.Resolute.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserService {
     private final UserRepo userRepo;
     private final RoutineRepo routineRepo;
+    private final AuthorityRepo authorityRepo;
 
     @Autowired
-    public UserService(UserRepo userRepo, RoutineRepo routineRepo) {
+    public UserService(UserRepo userRepo, RoutineRepo routineRepo, AuthorityRepo authorityRepo) {
         this.userRepo = userRepo;
         this.routineRepo = routineRepo;
+        this.authorityRepo = authorityRepo;
     }
 
     public User findUserById(long id){
@@ -28,7 +33,13 @@ public class UserService {
     }
 
     public List<User> findAllUsers(){
-        return userRepo.findAll();
+        List<User> users = userRepo.findAll();
+        for(User user : users){
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(authorityRepo.findByUserId(user.getId()));
+            user.setAuthorities(authorities);
+        }
+        return users;
     }
 
     public User addUser(User user){return userRepo.save(user);}

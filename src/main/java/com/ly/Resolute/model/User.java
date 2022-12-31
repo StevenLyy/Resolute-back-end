@@ -39,7 +39,9 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "routine_id"))
     private Set<Routine> routines = new HashSet<>();
 
-    public User(String fullName){
+    public User(String username, String password, String fullName){
+        this.username = username;
+        this.password = password;
         this.fullName = fullName;
     }
 
@@ -52,11 +54,15 @@ public class User implements UserDetails {
         routines.add(routine);
     }
 
+    @Transient
+    List<GrantedAuthority> authorities;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> roles = new ArrayList<>();
-        roles.add(new Authority("ROLE_STUDENT"));
-        return roles;
+        return authorities;
+    }
+
+    public void setAuthorities(List<GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 
     @Override

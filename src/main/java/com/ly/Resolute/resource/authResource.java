@@ -3,6 +3,9 @@ package com.ly.Resolute.resource;
 import com.ly.Resolute.model.User;
 import com.ly.Resolute.resource.dto.LoginRequest;
 import com.ly.Resolute.resource.dto.LoginResponse;
+import com.ly.Resolute.resource.dto.RegisterDTO;
+import com.ly.Resolute.service.RegisterService;
+import com.ly.Resolute.service.UserService;
 import com.ly.Resolute.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +24,9 @@ public class authResource {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private RegisterService registerService;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
     @PostMapping("/login")
@@ -37,6 +43,16 @@ public class authResource {
             user.setPassword(null);
             LoginResponse Response = new LoginResponse(user, jwtUtil.generateToken(user));
             return new ResponseEntity<>(Response, HttpStatus.OK);
+        } catch (BadCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegisterDTO request) {
+        try {
+            registerService.Register(request.getUsername(), request.getPassword(), request.getFullName());
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
