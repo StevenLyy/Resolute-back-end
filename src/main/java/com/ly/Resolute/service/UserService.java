@@ -28,8 +28,11 @@ public class UserService {
     }
 
     public User findUserById(long id){
-        return userRepo.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User by id" + id + " not found"));
+        User user = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException("User by id" + id + " not found"));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(authorityRepo.findByUserId(id));
+        user.setAuthorities(authorities);
+        return user;
     }
 
     public List<User> findAllUsers(){

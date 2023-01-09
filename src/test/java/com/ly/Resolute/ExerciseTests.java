@@ -58,7 +58,7 @@ public class ExerciseTests {
         assertEquals("Dumbbell details", foundExercise.get().getDetails());
 
         Iterator<Musclegroup> iterator = foundExercise.get().getMusclegroups().iterator();
-        assertEquals(musclegroup2, iterator.next());
         assertEquals(musclegroup1, iterator.next());
+        assertEquals(musclegroup2, iterator.next());
     }
 }

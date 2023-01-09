@@ -14,7 +14,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5000"})
@@ -29,6 +32,9 @@ public class authResource {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         try {
@@ -40,7 +46,8 @@ public class authResource {
                     );
 
             User user = (User) authenticate.getPrincipal();
-            user.setPassword(null);
+            User AuthorityFromUser = userService.findUserById(user.getId());
+            user.setAuthorities((List<GrantedAuthority>) AuthorityFromUser.getAuthorities());
             LoginResponse Response = new LoginResponse(user, jwtUtil.generateToken(user));
             return new ResponseEntity<>(Response, HttpStatus.OK);
         } catch (BadCredentialsException ex) {
