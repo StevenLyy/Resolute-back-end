@@ -32,7 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // get the authorization header and validate
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(!StringUtils.hasText(header) || StringUtils.hasText(header) && !header.startsWith("Bearer ")){
+        if (!StringUtils.hasText(header) || StringUtils.hasText(header) && !header.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -40,21 +40,24 @@ public class JwtFilter extends OncePerRequestFilter {
         final String token = header.split(" ")[1].trim();
 
         // get user identity and set it on the spring security context
-        UserDetails userDetails = userRepo
+        UserDetails test = userRepo
                 .findByUsername(jwtUtil.getUsernameFromToken(token))
                 .orElse(null);
+        CustomUserDetails userDetails = new CustomUserDetails(userRepo.findByUsername(jwtUtil.getUsernameFromToken(token)).orElse(null), jwtUtil.getAuthorityFromToken(token));
+        System.out.println(userDetails.getAuthorities());
+        System.out.println(userDetails.getUsername());
 
         // get jwt token and validate
-        if(!jwtUtil.validateToken(token, userDetails)){
+        if (!jwtUtil.validateToken(token, userDetails)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null,
-                        userDetails==null?
-                                List.of() : userDetails.getAuthorities()
+                userDetails, null,
+                userDetails == null ?
+                        List.of() : userDetails.getAuthorities()
         );
 
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

@@ -20,7 +20,11 @@ public class JwtUtil {
     private String secret;
 
     public String getUsernameFromToken(String token) {
-        return getClaimFromToken(token, Claims::getSubject);
+    return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    public String getAuthorityFromToken(String token){
+        return getAllClaimsFromToken(token).get("role").toString();
     }
 
     public Date getIssuedAtDateFromToken(String token) {
@@ -52,6 +56,7 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        userDetails.getAuthorities().forEach(authority -> claims.put("role", authority.getAuthority()));
         return doGenerateToken(claims, userDetails.getUsername());
     }
 

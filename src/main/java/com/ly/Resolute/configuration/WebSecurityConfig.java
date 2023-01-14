@@ -1,10 +1,13 @@
 package com.ly.Resolute.configuration;
 
+
 import com.ly.Resolute.filter.JwtFilter;
 import com.ly.Resolute.util.CustomPasswordEncoder;
+import com.ly.Resolute.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -56,16 +59,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/v1/auth/login", "api/v1/exercises/").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/api/v1/auth/login").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/routines/").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.POST,"/api/v1/routines/").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.PUT,"/api/v1/routines/").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET,"/api/v1/exercises/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .antMatchers(HttpMethod.POST,"/api/v1/exercises/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/v1/exercises/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/v1/exercises/**").hasAuthority("ROLE_ADMIN")
                 .and()
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:3001", "http://localhost:5000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
